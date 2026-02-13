@@ -1,10 +1,14 @@
 # VOID Shared Memory
 
+ ![VOID Shared Memory](/void_logo.png)
+
 Deterministic shared memory protocol for real-time numeric data exchange.
 
 **VOID Shared Memory** (VOID SHM) defines a strict, versioned memory contract designed for ultra-low-latency communication between independent applications running on the same machine.
 
 It is not a generic IPC framework. It is a deterministic shared state space.
+
+
 
 Developed by **[Julien Bayle](https://structure-void.com/en) — [Structure Void](https://structure-void.com)**.
 
