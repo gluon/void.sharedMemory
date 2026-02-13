@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="_c74_vig.xsl" type="text/xsl"?>
+
+<vignette name="VOID Shared Memory"
+          package="void.sharedMemory">
+
+  <!-- ========================================================= -->
+  <!-- METADATA -->
+  <!-- ========================================================= -->
+
+  <metadatalist>
+    <metadata name="author">Julien Bayle — Structure Void</metadata>
+    <metadata name="tag">shared memory</metadata>
+    <metadata name="tag">interprocess</metadata>
+    <metadata name="tag">ipc</metadata>
+    <metadata name="tag">real-time</metadata>
+    <metadata name="tag">data</metadata>
+    <metadata name="tag">system</metadata>
+  </metadatalist>
+
+  <!-- ========================================================= -->
+  <!-- TITLE -->
+  <!-- ========================================================= -->
+
+  <h1>VOID Shared Memory</h1>
+
+  <p>
+    VOID Shared Memory is a low-level, deterministic system for real-time
+    numeric data exchange between independent applications running on the
+    same machine.
+  </p>
+
+  <p>
+    It is designed as a shared state space based on POSIX shared memory
+    and a strict, versioned memory contract.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- CORE IDEA -->
+  <!-- ========================================================= -->
+
+  <h2>Core Concept</h2>
+
+  <p>
+    The core idea behind VOID Shared Memory is simple and explicit:
+  </p>
+
+  <ul>
+    <li>one application writes structured numeric data into shared memory</li>
+    <li>one or more applications read snapshots of that data</li>
+  </ul>
+
+  <p>
+    The shared memory segment is identified by name and follows a strict
+    binary layout. Writers own structure. Readers consume state.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- MEMORY CONTRACT -->
+  <!-- ========================================================= -->
+
+  <h2>The Shared Memory Contract (V2)</h2>
+
+  <p>
+    All shared memory segments follow the VOID Shared Memory Contract,
+    currently version 2.
+  </p>
+
+  <p>
+    Each segment starts with a fixed-size binary header containing:
+  </p>
+
+  <ul>
+    <li>a magic number and version identifier</li>
+    <li>explicit structural parameters (channels, length)</li>
+    <li>a monotonically increasing epoch counter</li>
+    <li>a monotonically increasing frame counter</li>
+    <li>ownership metadata (application, project, node)</li>
+  </ul>
+
+  <p>
+    The payload immediately follows the header and consists of
+    32-bit floating point values organized as:
+  </p>
+
+  <p>
+    channels × length
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- EPOCH / FRAME -->
+  <!-- ========================================================= -->
+
+  <h2>Epoch and Frame Model</h2>
+
+  <p>
+    Two counters define the temporal semantics of the system.
+  </p>
+
+  <h3>Epoch</h3>
+
+  <p>
+    The epoch represents a structural generation of the shared memory.
+    Any structural change (such as channels, length, or name) triggers
+    a hard reset of the segment and increments the epoch.
+  </p>
+
+  <h3>Frame</h3>
+
+  <p>
+    The frame represents activity within a stable structure.
+    Each successful write increments the frame counter.
+  </p>
+
+  <p>
+    Readers and observers can reliably detect:
+  </p>
+
+  <ul>
+    <li>structural resets via epoch changes</li>
+    <li>activity or stalling via frame progression</li>
+  </ul>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- CONNECTION MODEL -->
+  <!-- ========================================================= -->
+
+  <h2>Explicit Connection Model</h2>
+
+  <p>
+    Connection is explicit and opt-in on both sides.
+  </p>
+
+  <ul>
+    <li>writers explicitly publish shared memory</li>
+    <li>readers explicitly attach to shared memory</li>
+  </ul>
+
+  <p>
+    No implicit connections occur. This prevents accidental writers,
+    duplicate publishers, and unintended memory conflicts.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- SNAPSHOT SEMANTICS -->
+  <!-- ========================================================= -->
+
+  <h2>Snapshot Semantics</h2>
+
+  <p>
+    Readers operate in strict snapshot mode.
+  </p>
+
+  <p>
+    A read operation always consists of:
+  </p>
+
+  <ul>
+    <li>opening the shared memory</li>
+    <li>validating the header</li>
+    <li>reading the payload</li>
+    <li>closing the memory mapping</li>
+  </ul>
+
+  <p>
+    No persistent pointer to the payload is kept across reads.
+    This guarantees consistency and avoids race conditions.
+  </p>
+
+  <cr/>
+  
+  <!-- ========================================================= -->
+  <!-- REPRESENTATION AND IMPLICIT CONVERSIONS -->
+  <!-- ========================================================= -->
+  
+  <h2>Representation and Implicit Conversions</h2>
+  
+  <p>
+    VOID Shared Memory always represents data using the same fundamental
+    structural model:
+  </p>
+  
+  <p>
+    channels × length
+  </p>
+  
+  <p>
+    This model is invariant across all writers and readers.
+    What changes between objects is only how data is <i>projected</i>
+    into that structure.
+  </p>
+  
+  <cr/>
+  
+  <h3>Structural Consistency</h3>
+  
+  <p>
+    Regardless of the source or destination object, the shared memory
+    payload is always interpreted as a two-dimensional numeric space:
+  </p>
+  
+  <ul>
+    <li><b>channels</b> define parallel lanes (rows)</li>
+    <li><b>length</b> defines samples or elements per lane (columns)</li>
+  </ul>
+  
+  <p>
+    This consistency allows different object types to interoperate
+    without ambiguity, even when their native representations differ.
+  </p>
+  
+  <cr/>
+  
+  <h3>Scalar and Vector Writers</h3>
+  
+  <p>
+    Audio-rate writers that operate on signals write one scalar value
+    per channel at each update.
+  </p>
+  
+  <p>
+    For example, writing a multichannel signal with five channels
+    produces the following shared memory layout:
+  </p>
+  
+  <p>
+    channels = 5, length = 1
+  </p>
+  
+  <p>
+    From a matrix-based perspective, this corresponds to a column vector
+    of five values.
+  </p>
+  
+  <p>
+    No special case exists here: a single-sample signal is simply a
+    length of one.
+  </p>
+  
+  <cr/>
+  
+  <h3>Matrix and Block Writers</h3>
+  
+  <p>
+    Matrix-based writers write full blocks of data in one operation.
+  </p>
+  
+  <p>
+    In this case:
+  </p>
+  
+  <ul>
+    <li>the number of matrix rows maps to <b>channels</b></li>
+    <li>the number of matrix columns maps to <b>length</b></li>
+  </ul>
+  
+  <p>
+    The shared memory layout directly reflects the matrix dimensions,
+    without reordering or padding.
+  </p>
+  
+  <cr/>
+  
+  <h3>Reader Projections</h3>
+  
+  <p>
+    Readers always consume the same underlying structure but may
+    expose it using different native representations.
+  </p>
+  
+  <p>
+    For example:
+  </p>
+  
+  <ul>
+    <li>a signal-based reader exposes each channel as a signal</li>
+    <li>a matrix-based reader exposes the payload as a 2D matrix</li>
+    <li>a message-based reader exposes the payload as lists or scalars</li>
+  </ul>
+  
+  <p>
+    These are not different data formats, but different views of the
+    same shared memory structure.
+  </p>
+  
+  <cr/>
+  
+  <h3>Mental Model</h3>
+  
+  <p>
+    To avoid confusion, it is useful to keep a single mental model:
+  </p>
+  
+  <p>
+    <i>
+      VOID Shared Memory does not convert data types — it only exposes
+      different projections of the same channels × length structure.
+    </i>
+  </p>
+  
+  <p>
+    Once this model is understood, moving between signals, matrices,
+    and messages becomes straightforward and predictable.
+  </p>
+  
+  <cr/>
+
+
+  <!-- ========================================================= -->
+  <!-- OBSERVABILITY -->
+  <!-- ========================================================= -->
+
+  <h2>Observability and Supervision</h2>
+
+  <p>
+    VOID Shared Memory provides dedicated tools for inspection and
+    supervision without touching payload data.
+  </p>
+
+  <ul>
+    <li>inspect metadata and ownership</li>
+    <li>detect existence and validity</li>
+    <li>monitor writer activity</li>
+    <li>detect stalls and structural resets</li>
+  </ul>
+
+  <p>
+    This enables robust orchestration of complex multi-process systems.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- TOPOLOGY -->
+  <!-- ========================================================= -->
+
+  <h2>Topology</h2>
+
+  <p>
+    The system supports one-writer, many-reader topologies.
+  </p>
+
+  <p>
+    Multiple readers may attach concurrently without coordination.
+    Multiple writers to the same segment are explicitly disallowed
+    by design.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- CONNECTORS -->
+  <!-- ========================================================= -->
+
+  <h2>Connectors</h2>
+
+  <p>
+    VOID Shared Memory is connector-agnostic.
+  </p>
+
+  <p>
+    Any environment capable of POSIX shared memory access and binary
+    struct interpretation can act as a writer or reader.
+  </p>
+
+  <p>
+    Current connectors include audio-visual environments and graphical
+    dataflow systems, where shared memory channels naturally map to
+    signal lanes or parameter arrays.
+  </p>
+
+  <p>
+    Other connectors can be implemented without modifying the contract.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- DESIGN PHILOSOPHY -->
+  <!-- ========================================================= -->
+
+  <h2>Design Philosophy</h2>
+
+  <ul>
+    <li>determinism over convenience</li>
+    <li>explicit control over automation</li>
+    <li>structural clarity over abstraction</li>
+    <li>debuggability over opacity</li>
+    <li>local performance over network transparency</li>
+  </ul>
+
+  <p>
+    VOID Shared Memory is intentionally boring at the lowest level,
+    so higher-level systems can be expressive, experimental,
+    and reliable.
+  </p>
+
+  <cr/>
+
+  <!-- ========================================================= -->
+  <!-- SEE ALSO -->
+  <!-- ========================================================= -->
+
+  <seealsolist>
+    <seealso name="void.sm.writer"/>
+    <seealso name="void.sm.reader"/>
+    <seealso name="void.sm.reader~"/>
+    <seealso name="jit.void.sm.writer"/>
+    <seealso name="jit.void.sm.reader"/>
+    <seealso name="void.sm.info"/>
+    <seealso name="void.sm.state"/>
+  </seealsolist>
+
+</vignette>

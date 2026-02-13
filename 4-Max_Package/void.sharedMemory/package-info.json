@@ -1,0 +1,106 @@
+{
+	"name": "void.sharedMemory",
+	"displayname": "VOID Shared Memory",
+	"version": "2.0.0",
+	"author": "Julien Bayle",
+	"authors": [
+		"Julien Bayle — Structure Void"
+	],
+	"description": "High-performance shared memory system for Max. Provides deterministic writers, readers, inspectors, and state observers for low-latency inter-process numeric data exchange using a strict shared memory contract.",
+	"tags": [
+		"externals",
+		"shared-memory",
+		"ipc",
+		"interprocess",
+		"control",
+		"audio-rate",
+		"data",
+		"system"
+	],
+	"website": "https://structure-void.com/tools/void-shared-memory/",
+	"extends": "",
+	"extensible": 0,
+
+	"max_version_min": "9.0.0",
+	"max_version_max": "none",
+
+	"os": {
+		"macintosh": {
+			"min_version": "none",
+			"platform": [ "x64", "arm64" ]
+		},
+		"windows": {
+			"min_version": "none",
+			"platform": [ "x64" ]
+		}
+	},
+
+	"homepatcher": "VOIDSharedMemory.maxpat",
+
+	"package_extra": {
+		"reverse_domain": "com.structure-void",
+		"copyright": "Copyright (c) 2026 Structure Void"
+	},
+
+	"filelist": {
+
+		"externals": [
+			"void.sm.writer.mxo",
+			"void.sm.writer~.mxo",
+			"void.sm.reader.mxo",
+			"void.sm.reader~.mxo",
+			"jit.void.sm.writer.mxo",
+			"jit.void.sm.reader.mxo",
+			"void.sm.info.mxo",
+			"void.sm.state.mxo",
+
+			"void.sm.writer.mxe64",
+			"void.sm.writer~.mxe64",
+			"void.sm.reader.mxe64",
+			"void.sm.reader~.mxe64",
+			"jit.void.sm.writer.mxe64",
+			"jit.void.sm.reader.mxe64",
+			"void.sm.info.mxe64",
+			"void.sm.state.mxe64"
+		],
+
+		"help": [
+			"void.sm.writer.maxhelp",
+			"void.sm.writer~.maxhelp",
+			"void.sm.reader.maxhelp",
+			"void.sm.reader~.maxhelp",
+			"jit.void.sm.writer.maxhelp",
+			"jit.void.sm.reader.maxhelp",
+			"void.sm.info.maxhelp",
+			"void.sm.state.maxhelp"
+		],
+
+		/*"examples": [
+			"examples/void.sm.writer_example.maxpat",
+			"examples/void.sm.reader_example.maxpat",
+			"examples/void.sm.reader~_example.maxpat",
+			"examples/jit.void.sm.writer_example.maxpat",
+			"examples/jit.void.sm.reader_example.maxpat",
+			"examples/void.sm.info_example.maxpat",
+			"examples/void.sm.state_example.maxpat"
+		],*/
+
+		"docs": [
+			"void.sm.writer.maxref.xml",
+			"void.sm.writer~.maxref.xml",
+			"void.sm.reader.maxref.xml",
+			"void.sm.reader~.maxref.xml",
+			"jit.void.sm.writer.maxref.xml",
+			"jit.void.sm.reader.maxref.xml",
+			"void.sm.info.maxref.xml",
+			"void.sm.state.maxref.xml",
+			"topics/void.sharedMemory_topic.maxvig.xml"
+		],
+
+		"extras": [
+			"VOID_SharedMemory.maxpat"
+		]
+	},
+
+	"c74install": 1
+}
