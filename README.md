@@ -14,7 +14,7 @@ Developed by **[Julien Bayle](https://structure-void.com/en) — [Structure Void
 
 [![GitHub Release](https://img.shields.io/github/v/release/gluon/void.sharedMemory)](https://github.com/gluon/void.sharedMemory/releases/latest)
 
-[](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)
+![](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)
 
 
 **Max Package** : macOS universal Binaries (intel/arm silicon)
