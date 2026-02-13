@@ -9,6 +9,10 @@ It is a deterministic shared state space.
 
 Developed by **Julien Bayle — Structure Void**.
 
+[![GitHub Release](https://img.shields.io/github/v/release/gluon/void.sharedMemory?display_name=release)](https://github.com/gluon/void.sharedMemory/releases/latest)
+
+[![Github All Releases](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)]()
+
 ---
 
 ## Overview
