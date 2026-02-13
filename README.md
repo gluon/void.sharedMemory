@@ -2,16 +2,20 @@
 
 Deterministic shared memory protocol for real-time numeric data exchange.
 
-VOID Shared Memory (VOID SHM) defines a strict, versioned memory contract designed for ultra-low-latency communication between independent applications running on the same machine.
+**VOID Shared Memory** (VOID SHM) defines a strict, versioned memory contract designed for ultra-low-latency communication between independent applications running on the same machine.
 
-It is not a generic IPC framework.  
-It is a deterministic shared state space.
+It is not a generic IPC framework. It is a deterministic shared state space.
 
-Developed by **Julien Bayle — Structure Void**.
+Developed by **[Julien Bayle](https://structure-void.com/en) — [Structure Void](https://structure-void.com)**.
 
 [![GitHub Release](https://img.shields.io/github/v/release/gluon/void.sharedMemory?display_name=release)](https://github.com/gluon/void.sharedMemory/releases/latest)
 
 [![Github All Releases](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)]()
+
+
+**Max Package** : macOS universal Binaries (intel/arm silicon)
+
+**TD Package** : macOS universal Binaries (intel/arm silicon)
 
 ---
 
