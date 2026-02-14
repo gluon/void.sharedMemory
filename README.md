@@ -8,13 +8,11 @@ Deterministic shared memory protocol for real-time numeric data exchange.
 
 It is not a generic IPC framework. It is a deterministic shared state space.
 
-
-
 Developed by **[Julien Bayle](https://structure-void.com/en) — [Structure Void](https://structure-void.com)**.
 
 [![GitHub Release](https://img.shields.io/github/v/release/gluon/void.sharedMemory)](https://github.com/gluon/void.sharedMemory/releases/latest)
 
-![](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)
+[![GitHub Release](https://img.shields.io/github/downloads/gluon/void.sharedMemory/total.svg)](https://github.com/gluon/void.sharedMemory/releases/latest)
 
 
 **Max Package** : macOS universal Binaries (intel/arm silicon)
@@ -243,7 +241,7 @@ All connectors must strictly comply with Header V2.
 
 # Versioning
 
-Releases follow semantic versioning:
+Releases follow semantic versioning :
 
 - Major → protocol change
 - Minor → implementation update
